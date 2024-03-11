@@ -1,0 +1,45 @@
+### Gerando access token (Direct Grant ou Resource Owner Password Credentials Grant)
+POST http://localhost:8080/realms/fullcycle-realm/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+username=user@user.com
+&password=secret
+&grant_type=password
+&client_id=fullcycle-client
+
+
+### Gerando access token e id token
+POST http://localhost:8080/realms/fullcycle-realm/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+username=user@user.com
+&password=secret
+&grant_type=password
+&client_id=fullcycle-client
+&scope=openid
+
+### authorization code flow
+POST http://localhost:8080/realms/fullcycle-realm/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code
+&client_id=fullcycle-client
+&code=d803812a-1cce-4d38-9d12-a33f143f5ee0.48ce3bf7-ef07-4aab-bf41-5b7726c97e56.34b28fed-8773-41a4-bfde-bf98c8950b26
+&redirect_uri=http://localhost:3000/callback
+
+
+
+### hibrido code flow
+POST https://keycloak.serverconsigov.com/realms/consigov/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code 
+&client_id=client-next
+&code=3d43f089-ef18-4f5e-9e80-750f8463fc34.1ace29e8-251c-4b18-bfff-c8f5b612f98e.85e92fe5-19f3-4439-b5dc-e9c3b55e64c8
+&redirect_uri=http://localhost:3004/callback,
+&nonce=0.fkite7c2a9n
+
+ 
+###
+GET http://localhost:3000/carga-inicial?ended=false&skip=0&includeAll=true&query
+ 

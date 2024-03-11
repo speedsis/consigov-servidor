@@ -1,0 +1,10 @@
+
+
+
+//Contratos  matricula e filtrados por consignataria idQuery
+GET http://localhost:3000/contrato/matricula?ended=false&skip=0&includeAll=true&matriculaQuery=51707151&idQuery=0104
+
+
+//Consignataria filtradas por empresa  
+###
+GET http://localhost:3000/consignataria?ended=false&skip=0&includeAll=true&query=&empresaId=clscj9kzb0001ai8h8lxpfd44
