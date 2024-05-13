@@ -23,8 +23,8 @@ export function makeLoginUrl() {
     client_id: 'client-next',
     redirect_uri: isLocalhost
       ? 'http://localhost:3004/auth/callback'
-      : 'https://app.consigov.com/auth/callback',
-    // redirect_uri: 'https://app.consigov.com/auth/callback',
+      : 'https://servidor.consigov.com/auth/callback',
+    // redirect_uri: 'https://servidor.consigov.com/auth/callback',
     response_type: 'token id_token code',
     nonce: nonce,
     state: state,
@@ -40,8 +40,8 @@ export async function exchangeCodeForToken(code: string) {
     code: code,
     redirect_uri: isLocalhost
       ? 'http://localhost:3004/auth/callback'
-      : 'https://app.consigov.com/auth/callback',
-    // redirect_uri: 'https://app.consigov.com/auth/callback',
+      : 'https://servidor.consigov.com/auth/callback',
+    // redirect_uri: 'https://servidor.consigov.com/auth/callback',
     nonce: Cookies.get('nonce') as string,
   });
 
@@ -206,11 +206,13 @@ export function makeLogoutUrl() {
     id_token_hint: Cookies.get('id_token') as string,
     post_logout_redirect_uri: isLocalhost
       ? 'http://localhost:3004/auth/login'
-      : 'https://app.consigov.com/auth/login',
-    // post_logout_redirect_uri: 'https://app.consigov.com/auth/login',
+      : 'https://servidor.consigov.com/auth/login',
+    // post_logout_redirect_uri: 'https://servidor.consigov.com/auth/login',
   });
 
-  Cookies.remove('access_token');
+  //servidor.consigov.com/
+
+  https: Cookies.remove('access_token');
   Cookies.remove('id_token');
   Cookies.remove('refresh_token');
   Cookies.remove('nonce');
