@@ -21,4 +21,5 @@ export const PATH_DASHBOARD = {
   simulacao: path(ROOTS_DASHBOARD, '/simulacao'),
   consulta: path(ROOTS_DASHBOARD, '/consulta'),
   search: path(ROOTS_DASHBOARD, '/search'),
+  servidor: path(ROOTS_DASHBOARD, '/servidor'),
 };

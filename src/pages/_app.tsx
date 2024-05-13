@@ -38,13 +38,9 @@ import SnackbarProvider from '../components/snackbar';
 import { MotionLazyContainer } from '../components/animate';
 import { ThemeSettings, SettingsProvider } from '../components/settings';
 
-// Check our docs
-// https://docs.minimals.cc/authentication/ts-version
-
-import { useRouter } from 'next/router';
-
 //Keycloak
 import { AuthProvider } from 'src/auth/AuthProvider';
+import ServidorProvider from 'src/context/ServidorContext';
 
 // ----------------------------------------------------------------------
 
@@ -72,22 +68,24 @@ export default function MyApp(props: MyAppProps & { cookies: any }) {
       </Head>
 
       <AuthProvider>
-        <ReduxProvider store={store}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <SettingsProvider>
-              <MotionLazyContainer>
-                <ThemeProvider>
-                  <ThemeLocalization>
-                    <SnackbarProvider>
-                      <ProgressBar />
-                      {getLayout && getLayout(<Component {...pageProps} />)}
-                    </SnackbarProvider>
-                  </ThemeLocalization>
-                </ThemeProvider>
-              </MotionLazyContainer>
-            </SettingsProvider>
-          </LocalizationProvider>
-        </ReduxProvider>
+        <ServidorProvider>
+          <ReduxProvider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <SettingsProvider>
+                <MotionLazyContainer>
+                  <ThemeProvider>
+                    <ThemeLocalization>
+                      <SnackbarProvider>
+                        <ProgressBar />
+                        {getLayout && getLayout(<Component {...pageProps} />)}
+                      </SnackbarProvider>
+                    </ThemeLocalization>
+                  </ThemeProvider>
+                </MotionLazyContainer>
+              </SettingsProvider>
+            </LocalizationProvider>
+          </ReduxProvider>
+        </ServidorProvider>
       </AuthProvider>
     </CacheProvider>
   );

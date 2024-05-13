@@ -90,7 +90,8 @@
     "stylis-plugin-rtl": "^2.1.1",
     "swr": "^2.2.4",
     "yup": "^1.0.0",
-    "zustand": "^4.5.0"
+    "zustand": "^4.5.0",
+    "moment": "^2.29.1"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",

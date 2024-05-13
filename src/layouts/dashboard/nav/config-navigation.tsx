@@ -13,6 +13,7 @@ const ICONS = {
   user: icon('ic_user'),
   home: icon('ic_home'),
   consulta: icon('ic_consulta'),
+  mail: icon('ic_mail'),
   logout: icon('ic_logout'),
   services: icon('ic_services'),
   ecommerce: icon('ic_ecommerce'),
@@ -49,10 +50,16 @@ const navConfig = [
         icon: ICONS.analytics,
       },
 
+      // {
+      //   title: 'Notificações',
+      //   path: PATH_DASHBOARD.consulta,
+      //   icon: ICONS.mail,
+      // },
+
       {
-        title: 'Consulta',
-        path: PATH_DASHBOARD.consulta,
-        icon: ICONS.consulta,
+        title: 'Servidor',
+        path: PATH_DASHBOARD.servidor,
+        icon: ICONS.user,
       },
 
       {

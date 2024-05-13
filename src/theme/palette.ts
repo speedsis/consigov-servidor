@@ -44,10 +44,10 @@ const GREY = {
 
 const PRIMARY = {
   lighter: '#CAFDF5',
-  light: '#61F3F3',
-  main: '#00B8D9',
+  light: '#246da7',
+  main: '#246da7',
   dark: '#006C9C',
-  darker: '#003768',
+  darker: '#09233b',
   contrastText: '#FFFFFF',
 };
 
@@ -62,10 +62,10 @@ const SECONDARY = {
 
 const INFO = {
   lighter: '#CAFDF5',
-  light: '#61F3F3',
-  main: '#00B8D9',
+  light: '#246da7',
+  main: '#246da7',
   dark: '#006C9C',
-  darker: '#003768',
+  darker: '#09233b',
   contrastText: '#FFFFFF',
 };
 
@@ -96,6 +96,8 @@ const ERROR = {
   contrastText: '#FFFFFF',
 };
 
+//09233b
+
 const COMMON = {
   common: { black: '#000000', white: '#FFFFFF' },
   primary: PRIMARY,
@@ -123,13 +125,13 @@ export default function palette(themeMode: 'light' | 'dark') {
     mode: 'light',
     text: {
       primary: GREY[800],
-      secondary: GREY[600],
+      secondary: GREY[800],
       disabled: GREY[500],
     },
     background: { paper: '#FFFFFF', default: '#FFFFFF', neutral: GREY[200] },
     action: {
       ...COMMON.action,
-      active: GREY[600],
+      active: GREY[800],
     },
   } as const;
 
@@ -138,17 +140,17 @@ export default function palette(themeMode: 'light' | 'dark') {
     mode: 'dark',
     text: {
       primary: '#FFFFFF',
-      secondary: GREY[500],
-      disabled: GREY[600],
+      secondary: GREY[800],
+      disabled: GREY[700],
     },
     background: {
       paper: GREY[800],
       default: GREY[900],
-      neutral: alpha(GREY[500], 0.16),
+      neutral: alpha(GREY[800], 0.16),
     },
     action: {
       ...COMMON.action,
-      active: GREY[500],
+      active: GREY[600],
     },
   } as const;
 

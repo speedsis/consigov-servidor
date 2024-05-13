@@ -5,4 +5,5 @@ export const enum ModalIds {
   AlterarEmprestimo = 'AlterarEmprestimoModal',
   LiquidarEmprestimo = 'LiquidarEmprestimoModal',
   Portabilidade = 'PortabilidadeModal',
+  DetalheConsignacao = 'DetalheConsignacaoModal',
 }

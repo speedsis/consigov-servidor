@@ -15,8 +15,10 @@ import { useSettingsContext } from 'src/components/settings';
 //
 
 import AccountPopover from './AccountPopover';
-
 import NotificationsPopover from './NotificationsPopover';
+
+import { useContext } from 'react';
+import { ServidorContext } from 'src/context/ServidorContext';
 
 // ----------------------------------------------------------------------
 
@@ -28,29 +30,15 @@ export default function Header({ onOpenNav }: Props) {
   const theme = useTheme();
 
   const { themeLayout } = useSettingsContext();
-
   const isNavHorizontal = themeLayout === 'horizontal';
-
   const isNavMini = themeLayout === 'mini';
-
   const isDesktop = useResponsive('up', 'lg');
-
   const isOffset = useOffSetTop(HEADER.H_DASHBOARD_DESKTOP) && !isNavHorizontal;
+
+  const { servidor } = useContext(ServidorContext);
 
   const renderContent = (
     <>
-      {/* {isDesktop && isNavHorizontal && <Logo sx={{ mr: 2.5 }} />}
-
-      {!isDesktop && (
-        <IconButton onClick={onOpenNav} sx={{ mr: 1, color: 'text.primary' }}>
-          <Iconify icon="eva:menu-2-fill" />
-        </IconButton>
-      )} */}
-
-      {/* <Searchbar /> */}
-
-      {/* <Logo sx={{ mx: 'auto', my: 20 }} /> */}
-
       <Box
         component="div"
         sx={{
@@ -68,7 +56,7 @@ export default function Header({ onOpenNav }: Props) {
           className="font-extrabold text-secondary"
           style={{ display: 'flex', alignItems: 'center' }}
         >
-          CONTRATO 000809 - JUL/2020
+          MATRÍCULA {servidor?.matricula} - JUL/2020
           <Iconify icon="eva:diagonal-arrow-right-up-fill" width={16} />
         </span>
       </Box>

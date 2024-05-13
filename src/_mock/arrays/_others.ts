@@ -64,7 +64,7 @@ export const _notifications = [...Array(1)].map((_, index) => ({
     // 'Delivery processing',
   ][index],
   description: [
-    'waiting for shipping',
+    'aguardando operações',
     // 'answered to your comment on the Minimal',
     // '5 unread messages',
     // 'sent from Guido Padberg',

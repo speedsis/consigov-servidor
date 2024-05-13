@@ -11,16 +11,15 @@ import {
 import { Consignacao } from 'src/@types/servidor';
 import { fCurrencyBrArquivo } from 'src/utils/formatNumber';
 
-interface TabelaBoletoProps {
+interface TabelaBoletoHomeProps {
   consignacao: Consignacao[];
 }
 
-export default function TabelaBoleto(props: TabelaBoletoProps) {
+export default function TabelaBoletoHome(props: TabelaBoletoHomeProps) {
   function rendereizarCabecalho() {
     return (
       <TableRow>
         <TableCell className={`text-left text-xs p-2`}>Contrato</TableCell>
-        <TableCell className={`text-left text-xs p-2`}>Consignatária</TableCell>
         <TableCell className={`text-center text-xs p-2`}>Parcela</TableCell>
         <TableCell className={`text-left text-xs p-2`}>Ref.</TableCell>
         <TableCell className={`text-right text-xs p-2`}>Vlr parcela</TableCell>
@@ -33,9 +32,7 @@ export default function TabelaBoleto(props: TabelaBoletoProps) {
     return props.consignacao?.map((finan, i) => (
       <TableRow key={finan.id} className={`${i % 2 === 0 ? 'bg-blue-100' : 'bg-blue-50'}`}>
         <TableCell className={`text-left text-principal text-xs p-2`}>{finan.contrato}</TableCell>
-        <TableCell className={`text-left text-principal text-xs p-2`}>
-          {finan.Consignataria.id} | {finan.Consignataria.descricao}{' '}
-        </TableCell>
+
         <TableCell className={`text-center text-principal text-xs p-2`}>
           {' '}
           {finan.parcelaContrato}{' '}

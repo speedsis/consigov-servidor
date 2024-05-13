@@ -1,13 +1,17 @@
-import React from 'react';
-import { Box, Typography } from '@mui/material';
+import React, { useContext } from 'react';
+import { Box, Divider, MenuItem, Select, Typography } from '@mui/material';
 import TabelaBoleto from './components/TabelaBoleto';
 import TabelaBoletoVencer from './components/TabelaBoletoVencer';
 import DashboardLayout from 'src/layouts/dashboard';
 
 import { IconeAjust, IconeBoleto, IconeBoleto_g, IconeInfo } from 'src/components/icons';
+import { ServidorContext } from 'src/context/ServidorContext';
+import { fCurrencyBrArquivo } from 'src/utils/formatNumber';
+import moment from 'moment';
 
 interface Financeiro {
   id: string;
+  contrato: string;
   parcela: number;
   vencimento: string;
   valor: number;
@@ -23,57 +27,12 @@ Search.getLayout = function getLayout(page: React.ReactElement) {
 
 export default function Search() {
   const [openModal, setOpenModal] = React.useState(false);
+  const { servidor } = useContext(ServidorContext);
 
-  const financeiro: Financeiro[] = [
-    {
-      id: '1',
-      parcela: 1,
-      vencimento: '20/11/2014',
-      valor: 5000,
-      juros: 0,
-      devido: 5000,
-    },
-    {
-      id: '2',
-      parcela: 2,
-      vencimento: '20/11/2014',
-      valor: 5000,
-      juros: 0,
-      devido: 5000,
-    },
-    {
-      id: '3',
-      parcela: 3,
-      vencimento: '20/11/2014',
-      valor: 5000,
-      juros: 0,
-      devido: 5000,
-    },
-    {
-      id: '4',
-      parcela: 4,
-      vencimento: '20/11/2014',
-      valor: 5000,
-      juros: 0,
-      devido: 5000,
-    },
-    {
-      id: '5',
-      parcela: 5,
-      vencimento: '20/11/2014',
-      valor: 5000,
-      juros: 0,
-      devido: 5000,
-    },
-    {
-      id: '6',
-      parcela: 6,
-      vencimento: '20/11/2014',
-      valor: 5000,
-      juros: 0,
-      devido: 5000,
-    },
-  ];
+  const consignacao = servidor?.Consignacoes || [];
+
+  const vlrParcela = consignacao[0].valorParcela || 0;
+  const parcelaContrato = consignacao[0].prazoContrato || 0;
 
   return (
     <Box className="flex h-screen">
@@ -82,23 +41,70 @@ export default function Search() {
           {/* Conteúdo do bloco financeiro */}
           <Box className="md:w-3/5 py-2 px-1">
             <Typography className="text-principal font-black text-base">
-              CONTRATO 5038900
+              MATRÍCULA {servidor?.matricula}
             </Typography>
             <Typography className="text-gray-500 font-semibold text-xs">
-              JOSE MAXWELL TAVARES
+              {servidor?.nome}
             </Typography>
           </Box>
-          <Box className="md:w-1/5 h-auto py-2 px-1">
+
+          <Box className="md:w-2/5 h-auto py-2 px-1">
+            <Box className="  px-2 py-2">
+              <Select
+                name="selectContrato"
+                sx={{ width: '100%' }}
+                // InputLabelProps={{ shrink: false }}
+                size="small"
+                value={''} // Defina o valor selecionado com base nos dados do usuário
+                onChange={(event) => {
+                  const selectedValue = event.target.value;
+                  const selectedOption = servidor?.Consignacoes.find(
+                    (option) => option.Consignataria.descricao === selectedValue
+                  );
+                  if (selectedOption) {
+                    // handleSelectionChange(selectedOption);
+                  }
+                }}
+              >
+                <MenuItem value=""> -- Nenhuma Seleção -- </MenuItem>
+                <Divider sx={{ borderStyle: 'dashed' }} />
+                {servidor?.Consignacoes.map((option) => (
+                  <MenuItem key={option.id} value={option.Consignataria.descricao}>
+                    {option.Consignataria.id} | {option.Consignataria.descricao}
+                  </MenuItem>
+                ))}
+              </Select>
+
+              {/* <Typography className="text-principal font-bold text-xs">
+                {servidor?.Consignacoes}
+              </Typography>
+              <Typography className="text-gray-500 lg:text-justify font-semibold text-xs">
+                PARCELAS
+              </Typography> */}
+            </Box>
+          </Box>
+
+          <Box className="md:w-2/5 h-auto py-2 px-1">
             <Box className="bg-gray-100 px-2 py-2">
-              <Typography className="text-principal font-bold text-xs">R$ 50.0000,00</Typography>
+              <Typography className="text-principal font-bold text-xs">
+                R$ {fCurrencyBrArquivo(vlrParcela * parcelaContrato)}
+              </Typography>
               <Typography className="text-gray-500 lg:text-justify font-semibold text-xs">
                 VALOR DO EMPRÉSTIMO
               </Typography>
             </Box>
           </Box>
-          <Box className="md:w-1/5 h-auto  py-2">
+          <Box className="md:w-2/5 h-auto  py-2">
             <Box className="bg-gray-100 px-2 py-2">
-              <Typography className="text-principal font-bold text-xs">20/11/2014</Typography>
+              <Typography className="text-principal font-bold text-xs">
+                {moment(
+                  new Date(
+                    new Date().getFullYear(),
+                    new Date().getMonth() + 1,
+                    new Date().getDate()
+                  )
+                ).format('MM/YYYY')}
+              </Typography>
               <Typography className="text-gray-500 lg:text-justify  font-semibold text-xs">
                 PRÓXIMA FATURA
               </Typography>
@@ -124,7 +130,7 @@ export default function Search() {
           </Box>
           <Box py-2>
             {/* Substitua pelo componente real TabelaBoleto */}
-            <TabelaBoleto financeiro={financeiro} />
+            <TabelaBoleto consignacao={consignacao} />
           </Box>
         </Box>
 
@@ -138,7 +144,7 @@ export default function Search() {
           </Box>
           <Box py-2>
             {/* Substitua pelo componente real TabelaBoletoVencer */}
-            <TabelaBoletoVencer financeiro={financeiro} />
+            <TabelaBoletoVencer financeiro={[]} />
           </Box>
         </Box>
       </Box>

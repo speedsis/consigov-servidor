@@ -46,7 +46,7 @@ export function Modal(props: ModalProps) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black/40" />
+            <div className="fixed inset-0 " />
           </Transition.Child>
 
           {/* this element is to trick the browser into centering the modal contents. */}
@@ -79,7 +79,7 @@ export function Modal(props: ModalProps) {
                   : {}
               }
               className={classNames(
-                'max-w-[100%] inline-block text-left transition-all transform bg-tertiary border border-secondary dark:bg-tertiary dark:text-white shadow-xl rounded-lg',
+                'max-w-[100%] inline-block text-left transition-all transform bg-zinc-200 border border-zinc-300 dark:bg-zinc-400  dark:text-white shadow-xl rounded-lg',
                 isFullscreen ? 'p-2' : 'align-middle p-4 px-6 my-8',
                 isAlert ? 'z-[998]' : 'z-30',
                 className
@@ -87,7 +87,7 @@ export function Modal(props: ModalProps) {
             >
               <Dialog.Title
                 as="h3"
-                className="flex items-center justify-between mb-2 text-2xl font-semibold text-gray-300 dark:text-white"
+                className="flex items-center justify-between mb-2 text-2xl font-semibold text-zinc-400 dark:text-white"
               >
                 {title}
 

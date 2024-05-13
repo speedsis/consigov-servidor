@@ -1,97 +1,416 @@
-type Contrato = {
+import { Consignataria } from './atividade';
+import { AuditLog } from './user';
+
+export type StatusContrato =
+  | 'ATIVO'
+  | 'INATIVO'
+  | 'PENDENTE'
+  | 'APROVADO'
+  | 'REJEITADO'
+  | 'SUSPENSO'
+  | 'VENCIDO'
+  | 'CANCELADO'
+  | 'QUITADO'
+  | 'NOVA_CONSIGNACAO';
+
+export const STATUS_CONTRATO_VALUE: Record<StatusContrato, StatusContrato> = {
+  ATIVO: 'ATIVO',
+  INATIVO: 'INATIVO',
+  PENDENTE: 'PENDENTE',
+  APROVADO: 'APROVADO',
+  REJEITADO: 'REJEITADO',
+  SUSPENSO: 'SUSPENSO',
+  VENCIDO: 'VENCIDO',
+  CANCELADO: 'CANCELADO',
+  QUITADO: 'QUITADO',
+  NOVA_CONSIGNACAO: 'NOVA_CONSIGNACAO',
+};
+
+export type StatusOperacao =
+  | 'AGUARDANDO_CONFIRMACAO'
+  | 'CONFIRMADO'
+  | 'CANCELADO'
+  | 'LIBERADA'
+  | 'UTILIZADO'
+  | 'ENVIADA_SERVIDOR'
+  | 'ENVIADA_CONSIGNATARIA'
+  | 'CANCELADA_SERVIDOR'
+  | 'CANCELADA_CONSIGNATARIA'
+  | 'APROVADA_SERVIDOR'
+  | 'APROVADA_CONSIGNATARIA';
+
+export const STATUS_OPERACAO: Record<StatusOperacao, StatusOperacao> = {
+  AGUARDANDO_CONFIRMACAO: 'AGUARDANDO_CONFIRMACAO',
+  CONFIRMADO: 'CONFIRMADO',
+  CANCELADO: 'CANCELADO',
+  LIBERADA: 'LIBERADA',
+  UTILIZADO: 'UTILIZADO',
+  ENVIADA_SERVIDOR: 'ENVIADA_SERVIDOR',
+  ENVIADA_CONSIGNATARIA: 'ENVIADA_CONSIGNATARIA',
+  CANCELADA_SERVIDOR: 'CANCELADA_SERVIDOR',
+  CANCELADA_CONSIGNATARIA: 'CANCELADA_CONSIGNATARIA',
+  APROVADA_SERVIDOR: 'APROVADA_SERVIDOR',
+  APROVADA_CONSIGNATARIA: 'APROVADA_CONSIGNATARIA',
+};
+
+type ADE = {
+  id: string;
+  ade: string;
+  consignacaoId: string;
+  renegociacao: boolean;
+  dtProposta: string;
+  dtDeferimento: string;
+  dtCarencia: string;
+  valContrato: number;
+  valPrestacao: number;
+  portabilidade: boolean;
+  dtAceite: string;
+  dataIndeferimento: string;
+  valLiberado: number;
+  numParcelas: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type Parcela = {
+  id: string;
+  consignacaoId: string;
+  servidorId: string;
+  empresaId: string;
+  origemmovimento: string;
+  valtitulo: number;
+  dtmovimento: string;
+  dtvencimento: string;
+  mesReferencia: number;
+  anoReferencia: number;
+  obstitulo: string;
+  perjurosmora: number;
+  flagbaixada: boolean;
+  status: string;
+  numparcelasadministradora: number;
+  dtultimopagamento: string;
+  sumvaldescconcedidotitulo: number;
+  sumvalpagamentotitulo: number;
+  sumvaljuroscobrado: number;
+  sumvaljurosisentado: number;
+  sumvaljurospostergado: number;
+  sumvaljurospostergadospagos: number;
+  tipocartao: string;
+  nossonumero: string;
+  flagativo: boolean;
+  idautorizado: number;
+  diasparaprotesto: number;
+  dtagendacobranca: string;
+  dtenviocobrancabanco: string;
+  dtprocdoccobranca: string;
+  flagagrupado: boolean;
+  flagenviocobrancabanco: boolean;
+  flagprotestado: boolean;
+  idbancoenviocobranca: number;
+  idcobradoratual: number;
+  idctabancariarecebccobranca: number;
+  idportador: number;
+  idusuarioprotesto: number;
+  perdescbaixaduplantecip: number;
+  tipoliberadoenvio: string;
+  idtitulo: string;
+  digitotitulo: number;
+};
+
+type ParcelaBaixas = {
+  id: string;
+  consignacaoId: string;
+  origemmovimento: string;
+  servidorId: string;
+  empresaId: string;
+  usuarioId: number;
+  dtpagamento: string;
+  valpagamentotitulo: number;
+  valdescontoconcedidotitulo: number;
+  valjuroscobrado: number;
+  valjurosisentado: number;
+  valjurospostergado: number;
+  valjurospostergadopago: number;
+  flagativo: boolean;
+  idcobradoratual: number;
+  idtitulo: string;
+  digitotitulo: number;
+  situacaobaixa: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type Comprovante = {
+  id: string;
+  consignacaoId: string;
+  tipo: string;
+  serial: string;
+  dataDocumento: string;
+};
+
+export type Historico = {
+  id: string;
+  consignacaoId: string;
+  tipo: string;
+  motivo: string;
+  dataDocumento: string;
+  numeroOficio: string;
+  numeroProcesso: string;
+  juizado: string;
+  juiz: string;
+  observacao: string;
+  cadastradoPor: string;
+  dataCadastro: string;
+};
+
+export type Rublica = {
+  id: string;
+  codigo: string;
+  descricao: string;
+  consignatariaId: string;
+};
+
+export type CancelarSuspenderConsignacao = {
+  consignacaoId: string;
+  motivo: string;
+  tipo: StatusContrato;
+  dataDocumento: Date;
+  numeroOficio: string;
+  numeroProcesso: string;
+  juizado: string;
+  juiz: string;
+  observacao: string;
+  canceladoPor: string;
+  usuarioId: string;
+};
+
+type Empresa = {
+  id: string;
+  nome: string;
+  cnpj: string;
+};
+
+export type Consignacao = {
   id: string;
   contrato: string;
-  empresa_id: string;
-  cargainicial_id: string;
-  servidor_id: string;
-  consignacao_id: string;
-  consignataria_id: string;
-  orgao_id: string;
-  secretaria_id: string;
-  parcela_contrato: number;
-  prazo_contrato: number;
-  valor_parcela: number;
-  parcelas_pagas: number;
-  parcelas_pend: number;
-  cd_sufixo: number;
-  created_at: string;
-  updated_at: string;
+  servidorId: string;
+  consignatariaId: string;
+  Consignataria: Consignataria;
+  Rublica: Rublica;
+  rublicaId: string;
+  empresaId: string;
+  Empresa: Empresa;
+  anoReferencia: string;
+  mesReferencia: string;
+  parcelas: Parcela[];
+  parcelaBaixas: ParcelaBaixas[];
+  CancelarSuspender: CancelarSuspenderConsignacao;
+  Historico: Historico[];
+  Comprovante: Comprovante[];
+  parcelaContrato: number;
+  prazoContrato: number;
+  valorParcela: number;
+  parcelasPagas: number;
+  parcelasPend: number;
+  cdSufixo: number;
+  createdAt: string;
+  updatedAt: string;
   descricao: string;
-  valtotal: string;
-  val_mensal: number;
-  total_parcelas: number;
+  valtotal: number;
+  dtCadastro: string;
+  dtProcessamento: string;
+  dtCancelamento: string;
   indice: number;
-  saldo_residual: number;
-  dt_inclusao: string;
-  dt_finalizacao: string;
+  saldoResidual: number;
+  dtInclusao: string;
+  dtFinalizacao: string;
   renegociada: boolean;
-  ref_inicial: string;
-  ref_final: string;
-  tiposervico: string;
+  refInicial: string;
+  refFinal: string;
   origem: string;
-  enviado_folha: boolean;
+  enviadoFolha: boolean;
   suspenso: boolean;
-  inclusao_aceita_pela_folha: boolean;
-  quitacao_aceita_pela_folha: boolean;
-  motivo_suspensao: string;
-  motivo_inclusao_aceita_pela_folha: string;
-  motivo_quitacao_aceita_pela_folha: string;
-  registro_anterior: string;
+  inclusaoAceitaPelaFolha: boolean;
+  quitacaoAceitaPelaFolha: boolean;
+  motivoSuspensao: string;
+  motivoInclusaoAceitaPelaFolha: string;
+  motivoQuitacaoAceitaPelaFolha: string;
+  registroAnterior: string;
   operador: string;
-  status: string;
+  status: StatusContrato;
+  ADE: ADE[];
+  AuditLog?: AuditLog;
+};
+
+export type ServidorBasic = {
+  id: string;
+  nome: string;
+  matricula: string;
+  cargo: string;
+  regime: string;
+  dtAdmissao?: Date | null;
+  cpf: string;
+  rg: string;
+  margem30: number;
+  margem10: number;
+  margemReservada: number;
+  salarioBase: number;
+  salarioMinimo: number;
+  salarioBruto: number;
+  salarioLiquido: number;
+  descontoObrigatorio: number;
+};
+
+export type Regime = {
+  id: string;
+  descricao: string;
+};
+
+export type Orgao = {
+  id: string;
+  descricao: string;
+};
+
+export type Cargo = {
+  id: string;
+  codigo: string;
+  descricao: string;
+};
+
+export type CargoWrapper = {
+  Cargo: Cargo; // Mudamos de tipo diretamente para Cargo
+};
+
+export type EmpresaOnServidor = {
+  empresaId: string;
+};
+
+export type Simulacao = {
+  id: string;
+  valorParcelas: number;
+  empresaId?: string;
+  parcelas?: number;
+  valorReceber: number;
+  prazo: number;
+  status: StatusOperacao;
+  dataCadastro?: string;
+  Consignatarias: Consignataria[];
+};
+
+export type SolicitaLiberacaoMargem = {
+  id: string;
+  valor: number;
+  dias: number;
+  prazo: number;
+  status: 'AGUARDANDO_LIBERACAO' | 'BLOQUEADA' | 'LIBERADA' | 'SUSPENSA' | 'CANCELADA';
+  dtSolicitacao: string;
+  Consignataria: Consignataria;
+  Empresa: Empresa;
+};
+
+type Notification = {
+  id: string;
+  title: string;
+  description: string;
+  createdAt: string;
+  status: 'READ' | 'PENDING' | 'EXCLUDED';
+  userId: string;
+  empresaId: string;
+  servidorId: string;
 };
 
 export type Servidor = {
-  id: string;
-  name: string;
-  matricula: string;
+  id?: string;
+  nome?: string;
+  matricula?: string;
   cpf: string;
   rg: string;
-  dtemissao_rg: string;
-  empresa_id: string;
-  dt_nascimento: string;
+  emissorRg: string;
+  dtemissaoRg: string;
+  ufRg: string;
+  dtNascimento: string;
   banco: string;
   agencia: string;
   conta: string;
-  created_at: string;
-  updated_at: string;
-  orgao_id: string;
-  regime_id: string;
-  dt_admissao: string;
-  dt_demissao: string;
-  dt_aposent: string;
-  ano_mes_incluso: string;
-  relacao_trabalho: string;
-  pazo_final_vinculo: string;
-  ano_mes_atualizacao: string;
-  dt_atualizacao: string;
-  dt_ultima_atualizacao: string;
-  dt_ultima_consulta: string;
-  dt_ultima_consulta_siape: string;
-  categoria: string;
-  cadastro_validado: boolean;
-  cadastro_ativo: boolean;
-  dt_cadastro_validado: string;
-  senha_servidor: string;
-  dt_horo_expiracao_senha: string;
-  competencia_ferias: string;
-  dt_ultima_atualizacao_ferias: string;
-  orgao_matricula: string;
-  orgao_nome: string;
-  isento_restricao_portabilidade: boolean;
-  imagem: string;
-  margem_consignavel_atual: number;
-  margem_consignavel_anterior: number;
-  margem_cartao_consignado: number;
-  margem_reservada: number;
-  margem_cartao_beneficio: number;
-  salario_base: number;
-  media_ultimos_meses: number;
-  situacao_servidor_id: string;
-  departamento_id: string;
-  secretaria_id: string;
-  vinculo_id: string;
-  tipo_servico_id: string;
-  classific_vinculo_funcional_id: string;
-  Contrato: Contrato[];
+  Regime: Regime;
+  Empresas: EmpresaOnServidor[];
+  dtAdmissao: string;
+  Orgao: Orgao;
+  Cargo: CargoWrapper[];
+  regimeId: string;
+  orgaoId: string;
+  cargoEstavel: boolean;
+  carteiraTrabalho: string;
+  pis: string;
+  estadoCivil: string;
+  sexo: string;
+  nomePai: string;
+  nomeMae: string;
+  nacionalidade: string;
+  escolaridade: string;
+  email: string;
+  celular: string;
+  telefone: string;
+  endereco: string;
+  numero: string;
+  complemento: string;
+  bairro: string;
+  cidade: string;
+  margem30: number;
+  margem10: number;
+  salarioBase: number;
+  salarioMinimo: number;
+  salarioBruto: number;
+  salarioLiquido: number;
+  descontoObrigatorio: number;
+  margemReservada: number;
+  uf: string;
+  cep: string;
+  Consignacoes: Consignacao[];
+  Proposta: Proposta[];
+  ReservaCartao: ReservaCartao[];
+  Simulacao: Simulacao[];
+  SolicitaLiberacaoMargem: SolicitaLiberacaoMargem[];
+  Notification: Notification[];
+};
+
+export type Proposta = {
+  id: string;
+  prazo: number;
+  restante: number;
+  valor: number;
+  valorTotal: number;
+  situacao: string;
+  status: StatusOperacao;
+  dataCadastro: string;
+  dtProposta: string;
+  dtAprovacaoCancelado: string;
+  tipoNegociacao: string;
+  dataProcessamento: string;
+  canceladoEm: string;
+  Rublica: Rublica;
+};
+
+export type MargemReservada = {
+  margemReservada: number;
+};
+
+export type ReservaCartao = {
+  id: string;
+  valor: number;
+  status: StatusOperacao;
+  criadoPor: string;
+  criadoEm: string;
+  dtReserva: string;
+};
+
+export type ServidorMargem = {
+  margem30: number;
+  margem10: number;
+  salarioBase: number;
+  salarioMinimo: number;
+  salarioBruto: number;
+  salarioLiquido: number;
+  descontoObrigatorio: number;
+  margemReservada: number;
 };
