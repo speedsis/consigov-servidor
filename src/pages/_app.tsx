@@ -6,9 +6,6 @@ import 'src/styles/globals.css';
 // redux
 import { Provider as ReduxProvider } from 'react-redux';
 
-// redux
-import { store } from 'src/redux/store';
-
 // scroll bar
 import 'simplebar-react/dist/simplebar.min.css';
 
@@ -69,22 +66,20 @@ export default function MyApp(props: MyAppProps & { cookies: any }) {
 
       <AuthProvider>
         <ServidorProvider>
-          <ReduxProvider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <SettingsProvider>
-                <MotionLazyContainer>
-                  <ThemeProvider>
-                    <ThemeLocalization>
-                      <SnackbarProvider>
-                        <ProgressBar />
-                        {getLayout && getLayout(<Component {...pageProps} />)}
-                      </SnackbarProvider>
-                    </ThemeLocalization>
-                  </ThemeProvider>
-                </MotionLazyContainer>
-              </SettingsProvider>
-            </LocalizationProvider>
-          </ReduxProvider>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <SettingsProvider>
+              <MotionLazyContainer>
+                <ThemeProvider>
+                  <ThemeLocalization>
+                    <SnackbarProvider>
+                      <ProgressBar />
+                      {getLayout && getLayout(<Component {...pageProps} />)}
+                    </SnackbarProvider>
+                  </ThemeLocalization>
+                </ThemeProvider>
+              </MotionLazyContainer>
+            </SettingsProvider>
+          </LocalizationProvider>
         </ServidorProvider>
       </AuthProvider>
     </CacheProvider>

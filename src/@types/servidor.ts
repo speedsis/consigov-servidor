@@ -1,6 +1,13 @@
 import { Consignataria } from './atividade';
 import { AuditLog } from './user';
 
+export type StatusMargem =
+  | 'AGUARDANDO_LIBERACAO'
+  | 'BLOQUEADA'
+  | 'LIBERADA'
+  | 'SUSPENSA'
+  | 'CANCELADA';
+
 export type StatusContrato =
   | 'ATIVO'
   | 'INATIVO'
@@ -302,7 +309,7 @@ export type SolicitaLiberacaoMargem = {
   valor: number;
   dias: number;
   prazo: number;
-  status: 'AGUARDANDO_LIBERACAO' | 'BLOQUEADA' | 'LIBERADA' | 'SUSPENSA' | 'CANCELADA';
+  status: StatusMargem;
   dtSolicitacao: string;
   Consignataria: Consignataria;
   Empresa: Empresa;

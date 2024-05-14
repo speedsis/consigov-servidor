@@ -27,13 +27,10 @@ interface Props extends CardProps {
 export default function BookingRoomAvailable({ title, subheader, chart, ...other }: Props) {
   const theme = useTheme();
 
-  const { colors, series, options } = chart;
+  const total = sumBy(chart?.series, 'value');
 
-  const total = sumBy(series, 'value');
-
-  const chartSeries = (series.filter((i) => i.label === 'Cartão benefício')[0].value / total) * 100;
-
-  const chartColors = colors || [theme.palette.primary.light, theme.palette.primary.main];
+  const chartSeries =
+    (chart?.series.filter((i) => i.label === 'Cartão benefício')[0].value / total) * 100;
 
   const chartOptions = useChart({
     legend: {
@@ -67,7 +64,7 @@ export default function BookingRoomAvailable({ title, subheader, chart, ...other
         },
       },
     },
-    ...options,
+    ...chart?.options,
   });
 
   return (
@@ -77,7 +74,7 @@ export default function BookingRoomAvailable({ title, subheader, chart, ...other
       <Chart type="radialBar" series={[chartSeries]} options={chartOptions} height={310} />
 
       <Stack spacing={2} sx={{ p: 5 }}>
-        {series.map((item) => (
+        {chart?.series.map((item) => (
           <Legend key={item.label} item={item} />
         ))}
       </Stack>

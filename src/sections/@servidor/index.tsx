@@ -26,8 +26,6 @@ ServidorDetalheForm.getLayout = function getLayout(page: React.ReactElement) {
 // ----------------------------------------------------------------------
 
 export default function ServidorDetalheForm() {
-  const [openModal, setOpenModal] = React.useState(false);
-  const { servidor } = useContext(ServidorContext);
   const { themeStretch } = useSettingsContext();
   const [value, setValue] = React.useState(0);
 

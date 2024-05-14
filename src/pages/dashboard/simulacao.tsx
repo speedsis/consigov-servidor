@@ -31,7 +31,7 @@ import EmptyContent from 'src/components/empty-content';
 import { fCurrencyBr, fCurrencyBrRetorno, formatCurrencyInput } from 'src/utils/formatNumber';
 import { useSnackbar } from 'notistack';
 import { ServidorContext } from 'src/context/ServidorContext';
-import { set } from 'lodash';
+
 import { Servidor } from 'src/@types/servidor';
 
 // ----------------------------------------------------------------------

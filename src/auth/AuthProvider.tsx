@@ -1,14 +1,14 @@
 import { PropsWithChildren, createContext, useCallback, useEffect, useState } from 'react';
 import * as utils from './utils';
-import { JWTPayload } from 'jose';
 import { Servidor } from 'src/@types/servidor';
+import { JWTPayload } from 'jose';
 
 type AuthContextProps = {
   auth: JWTPayload | null;
   makeLoginUrl: () => string;
   makeLogoutUrl: () => string | false;
   login: (accessToken: string, idToken: string, code: string, state: string) => JWTPayload;
-  servidor: Servidor | null;
+  // servidor: Servidor | null;
 };
 
 const initContextData: AuthContextProps = {
@@ -27,14 +27,14 @@ export const AuthContext = createContext(initContextData);
 
 //create a provider for the login state
 export const AuthProvider = (props: PropsWithChildren) => {
-  const [newServidor, setServidor] = useState<Servidor | null>(null);
+  // const [newServidor, setServidor] = useState<Servidor | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await utils.getServidor();
-        setServidor(data);
+        // setServidor(data);
         setLoading(false);
       } catch (error) {
         console.error('Erro ao obter servidor:', error);
@@ -60,7 +60,7 @@ export const AuthProvider = (props: PropsWithChildren) => {
         makeLoginUrl: oldData.makeLoginUrl,
         makeLogoutUrl: oldData.makeLogoutUrl,
         login: oldData.login,
-        servidor: oldData.servidor,
+        // servidor: oldData.servidor,
       }));
 
       utils.exchangeCodeForToken(code).then((newAuthData) => {
@@ -69,7 +69,7 @@ export const AuthProvider = (props: PropsWithChildren) => {
           makeLoginUrl: oldData.makeLoginUrl,
           makeLogoutUrl: oldData.makeLogoutUrl,
           login: oldData.login,
-          servidor: oldData.servidor,
+          // servidor: oldData.servidor,
         }));
       });
       return authData;
@@ -82,14 +82,14 @@ export const AuthProvider = (props: PropsWithChildren) => {
     makeLoginUrl: utils.makeLoginUrl,
     makeLogoutUrl: utils.makeLogoutUrl,
     login: makeLogin,
-    servidor: newServidor,
+    // servidor: newServidor,
   });
 
   // Verifique se newServidor é null e retorne um componente de carregamento se for
-  if (newServidor === null) {
-    console.log('Aguardando carregamento do servidor...');
-    return null; // ou algum componente de carregamento
-  }
+  // if (newServidor === null) {
+  //   console.log('Aguardando carregamento do servidor...');
+  //   return null; // ou algum componente de carregamento
+  // }
 
   return <AuthContext.Provider value={data}>{props.children}</AuthContext.Provider>;
 };

@@ -2,7 +2,6 @@ import { useSnackbar } from 'notistack';
 import { useModal } from 'src/state/modalState';
 import { ModalIds } from 'src/@types/modal-ids';
 
-// import DetalheConsignacaoModal from 'src/sections/@consignacao/modal/DetalheConsignacaoModal';
 import { Consignacao, ServidorBasic } from 'src/@types/servidor';
 
 import { useTemporaryItem } from 'src/state/useTemporaryItem';
@@ -10,25 +9,20 @@ import AppListConsignacao from '../components/AppListConsignacao';
 import { useContext } from 'react';
 import { ServidorContext } from 'src/context/ServidorContext';
 import DetalheConsignacaoModal from '../modal/DetalheConsignacaoModal';
-// import SuspenderConsignacaoModal from 'src/sections/@consignacao/modal/SuspenderConsignacaoModal';
-// import { useContext } from 'react';
-// import { AuthContext } from 'src/auth/AuthProvider';
-// import { useUserData } from 'src/context/userDataContext';
 
 export default function ServidorConsignacao() {
   //   const { currentServidor, setCurrentServidor } = useServidorState();
   const { servidor } = useContext(ServidorContext);
   const consignacao = servidor?.Consignacoes ?? [];
 
-  // const consignatariaId = auth ? (auth as any)?.consignataria[0]?.id : null;
-  const consignatariaId = '0999'; //userData?.consignataria.id as string;
+  // const consignatariaId = '0999';
 
-  // Aplicando o filtro
-  const consignacoesFiltradas = consignacao.filter(
-    (consignacao) => consignacao.consignatariaId === consignatariaId
-  );
+  // // Aplicando o filtro
+  // const consignacoesFiltradas = consignacao.filter(
+  //   (consignacao) => consignacao.consignatariaId === consignatariaId
+  // );
 
-  const [tempRecord, recordState] = useTemporaryItem(consignacoesFiltradas);
+  const [tempRecord, recordState] = useTemporaryItem(consignacao);
 
   const row = servidor;
   const servidorBasic: ServidorBasic = {
@@ -75,7 +69,7 @@ export default function ServidorConsignacao() {
         title="Consignações"
         onClickDetalhes={onClickDetalhes}
         onClickCancelaSuspender={handleClickSuspender}
-        tableData={consignacoesFiltradas!}
+        tableData={consignacao!}
         tableLabels={[
           { id: 'id', align: 'left', label: 'Codigo' },
           { id: 'rublica', align: 'left', label: 'Rublica' },

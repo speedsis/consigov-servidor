@@ -1,5 +1,5 @@
 // @mui
-import { useTheme } from '@mui/material/styles';
+
 import {
   Box,
   Card,
@@ -13,6 +13,7 @@ import {
   TableContainer,
   TablePagination,
   TableCell,
+  Stack,
 } from '@mui/material';
 // utils
 
@@ -23,10 +24,10 @@ import { TableHeadCustom } from 'src/components/table';
 import useTable from 'src/hooks/useTable';
 import { fDateNow, fDateNowNew } from 'src/utils/formatTime';
 import Scrollbar from 'src/components/scrollbar';
-import Iconify from 'src/components/iconify';
-import { useState } from 'react';
-import { STATUS_OPERACAO, SolicitaLiberacaoMargem } from 'src/@types/servidor';
+
+import { SolicitaLiberacaoMargem, StatusMargem } from 'src/@types/servidor';
 import Label from 'src/components/Label';
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +35,7 @@ interface Props extends CardProps {
   title?: string;
   subheader?: string;
   tableData: SolicitaLiberacaoMargem[];
+  onEditMargemRow?: (row: SolicitaLiberacaoMargem) => void;
   tableLabels: any;
 }
 
@@ -41,6 +43,7 @@ export default function AppListSolicitacaoMargemOnline({
   title,
   subheader,
   tableData,
+  onEditMargemRow,
   tableLabels,
   ...other
 }: Props) {
@@ -60,7 +63,7 @@ export default function AppListSolicitacaoMargemOnline({
 
             <TableBody>
               {tableData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                <AppDependentesRow key={row.id} row={row} />
+                <AppDependentesRow key={row.id} row={row} onEditMargemRow={onEditMargemRow} />
               ))}
             </TableBody>
           </Table>
@@ -81,7 +84,7 @@ export default function AppListSolicitacaoMargemOnline({
 
       <Divider />
 
-      <Box sx={{ p: 2, textAlign: 'center' }}>
+      {/* <Box sx={{ p: 2, textAlign: 'center' }}>
         <Button
           onClick={() => {}}
           size="small"
@@ -91,7 +94,7 @@ export default function AppListSolicitacaoMargemOnline({
         >
           Solicitação de visualização de margem
         </Button>
-      </Box>
+      </Box> */}
     </Card>
   );
 }
@@ -100,25 +103,29 @@ export default function AppListSolicitacaoMargemOnline({
 
 type AppDependentesRowProps = {
   row: SolicitaLiberacaoMargem;
+  onEditMargemRow?: (row: SolicitaLiberacaoMargem) => void;
 };
 
-function AppDependentesRow({ row }: AppDependentesRowProps) {
-  const theme = useTheme();
-
+function AppDependentesRow({ row, onEditMargemRow }: AppDependentesRowProps) {
   const { id, valor, dias, prazo, status, dtSolicitacao, Consignataria, Empresa } = row;
 
-  const [open, setOpen] = useState(false);
-  const [openMenu, setOpenMenuActions] = useState<HTMLElement | null>(null);
-  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setOpenMenuActions(event.currentTarget);
-  };
+  const handleProcessa = (row: SolicitaLiberacaoMargem, status: StatusMargem) => () => {
+    const data = { ...row, status: status };
 
-  const handleCloseMenu = () => {
-    setOpenMenuActions(null);
+    onEditMargemRow && onEditMargemRow(data);
   };
 
   return (
-    <TableRow>
+    <TableRow
+      sx={{
+        '&:nth-of-type(odd)': {
+          backgroundColor: 'divider',
+        },
+        '& > .MuiTableCell-root': {
+          paddingY: 1, // Diminui a margem vertical
+        },
+      }}
+    >
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {Consignataria?.descricao}
       </TableCell>
@@ -129,12 +136,11 @@ function AppDependentesRow({ row }: AppDependentesRowProps) {
         <Label
           variant="ghost"
           color={
-            (status === STATUS_OPERACAO.ENVIADA_SERVIDOR && 'success') ||
-            (status === STATUS_OPERACAO.ENVIADA_CONSIGNATARIA && 'warning') ||
-            (status === STATUS_OPERACAO.CANCELADA_SERVIDOR && 'error') ||
-            (status === STATUS_OPERACAO.CANCELADA_CONSIGNATARIA && 'error') ||
-            (status === STATUS_OPERACAO.APROVADA_CONSIGNATARIA && 'info') ||
-            (status === STATUS_OPERACAO.APROVADA_SERVIDOR && 'success') ||
+            (status === 'AGUARDANDO_LIBERACAO' && 'primary') ||
+            (status === 'BLOQUEADA' && 'warning') ||
+            (status === 'LIBERADA' && 'success') ||
+            (status === 'SUSPENSA' && 'error') ||
+            (status === 'CANCELADA' && 'info') ||
             'secondary'
           }
         >
@@ -149,13 +155,29 @@ function AppDependentesRow({ row }: AppDependentesRowProps) {
       <TableCell align="left"> {fDateNowNew(dtSolicitacao)} </TableCell>
 
       <TableCell align="right">
-        <Button variant="contained" size="small" color="primary" onClick={() => {}}>
-          Aceitar
-        </Button>
+        <Stack direction="row" spacing={1} justifyContent="flex-end">
+          {row?.status === 'AGUARDANDO_LIBERACAO' ? (
+            <Button
+              variant="outlined"
+              startIcon={<Iconify icon={'fluent:save-arrow-right-20-filled'} />}
+              onClick={handleProcessa(row, 'LIBERADA')}
+              color="secondary"
+            >
+              Aceitar
+            </Button>
+          ) : null}
 
-        <Button variant="contained" size="small" color="inherit" onClick={() => {}}>
-          Cancelar
-        </Button>
+          {row?.status === 'AGUARDANDO_LIBERACAO' || row?.status === 'LIBERADA' ? (
+            <Button
+              variant="outlined"
+              startIcon={<Iconify icon={'fluent:save-arrow-right-20-filled'} />}
+              onClick={handleProcessa(row, 'CANCELADA')}
+              color="error"
+            >
+              Cancelar
+            </Button>
+          ) : null}
+        </Stack>
       </TableCell>
     </TableRow>
   );

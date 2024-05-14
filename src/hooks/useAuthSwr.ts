@@ -1,32 +1,40 @@
-import { useRouter } from 'next/router';
-import { AxiosError } from 'axios';
-import { useEffect } from 'react';
 import useSWR, { SWRConfiguration } from 'swr';
-import makeHttp from '../utils/http';
-// import { SWRConfiguration } from "swr/dist/types";
-
-const fetcher = (url: string) =>
-  makeHttp()
-    .get(url)
-    .then((res) => res.data);
+import makeHttp from 'src/utils/http';
 
 export function useAuthSwr(url: string, config?: SWRConfiguration) {
-  //  console.log('recebido swr url', url)
+  const varUrlName = process.env.NEXT_PUBLIC_API_DEVELOPER_URL;
+  const newUrl = `${varUrlName}/${url}`;
 
-  const { data, error } = useSWR<any, AxiosError>(url, fetcher, config);
+  const { data, error } = useSWR(newUrl, fetcher, {
+    refreshInterval: 3000,
+  });
 
-  const { push } = useRouter();
+  async function fetcher(newUrl: string) {
+    try {
+      const response = await makeHttp(newUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-  // console.log('resposta swr url', data)
+      if (!response.ok) {
+        throw new Error('Erro ao fazer a solicitação');
+      }
 
-  useEffect(() => {
-    if (error?.response?.status === 401) {
-      push('/logout');
+      const responseData = await response.json();
+
+      // Verifique se responseData é válido antes de retorná-lo
+      if (!responseData) {
+        throw new Error('Resposta inválida');
+      }
+
+      return responseData.data;
+    } catch (error) {
+      console.error('Erro ao fazer a solicitação:', error);
+      throw error;
     }
-    if (error) {
-      console.error(error);
-    }
-  }, [data, error, push]);
+  }
 
   return { data, error };
 }

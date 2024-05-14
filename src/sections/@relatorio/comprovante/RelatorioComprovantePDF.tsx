@@ -9,7 +9,6 @@ import _uniqBy from 'lodash/uniqBy';
 import { fDateNow, fDateNowNew } from 'src/utils/formatTime';
 
 import { Consignacao, ServidorBasic } from 'src/@types/servidor';
-import { Divider } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

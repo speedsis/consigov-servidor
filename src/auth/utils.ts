@@ -210,9 +210,7 @@ export function makeLogoutUrl() {
     // post_logout_redirect_uri: 'https://servidor.consigov.com/auth/login',
   });
 
-  //servidor.consigov.com/
-
-  https: Cookies.remove('access_token');
+  Cookies.remove('access_token');
   Cookies.remove('id_token');
   Cookies.remove('refresh_token');
   Cookies.remove('nonce');
@@ -257,6 +255,12 @@ async function saveToCookieData(auth: any) {
 }
 
 export async function getServidor(): Promise<Servidor> {
+  const token = Cookies.get('access_token');
+
+  if (!token) {
+    return {} as Servidor;
+  }
+
   try {
     const data = await new ServidorService().getServidor(
       'clukjlqxp0000ik9inf67gl1f',

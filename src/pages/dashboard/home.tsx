@@ -7,10 +7,10 @@ import {
   IconeUserGroup,
 } from 'src/components/icons';
 //
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 // @mui
-import { Button, Container, Grid, useTheme, Box, Typography } from '@mui/material';
+import { Button, Container, Grid, useTheme, Box, Typography, Card } from '@mui/material';
 
 // hooks
 import useResponsive from 'src/hooks/useResponsive';
@@ -18,7 +18,7 @@ import useResponsive from 'src/hooks/useResponsive';
 // layouts
 import DashboardLayout from 'src/layouts/dashboard';
 // components
-import Iconify from 'src/components/iconify';
+
 import { useSnackbar } from 'src/components/snackbar';
 
 import { useSettingsContext } from 'src/components/settings';
@@ -34,11 +34,10 @@ import { ServidorContext } from 'src/context/ServidorContext';
 import { fCurrencyBrArquivo } from 'src/utils/formatNumber';
 
 import moment from 'moment';
-import DonusChart from 'src/components/chart/Donus';
 import BookingRoomAvailable from './components/BookingRoomAvailable';
-import TabelaBoletoVencer from './components/TabelaBoletoVencer';
-import TabelaBoleto from './components/TabelaBoleto';
 import TabelaBoletoHome from './components/TabelaBoletoHome';
+import EcommerceCurrentBalance from './components/EcommerceCurrentBalance';
+import PDFDialogHolerite from 'src/sections/@servidor/relatorio/PDFDialogHolerite';
 
 // ----------------------------------------------------------------------
 
@@ -46,27 +45,16 @@ PageThree.getLayout = (page: React.ReactElement) => <DashboardLayout>{page}</Das
 
 // ----------------------------------------------------------------------
 
-interface Financeiro {
-  id: string;
-  contrato: string;
-  parcela: number;
-  vencimento: string;
-  valor: number;
-  juros: number;
-  devido: number;
-}
-
 export default function PageThree() {
   const { auth } = useContext(AuthContext);
-  const { servidor } = useContext(ServidorContext);
-
+  const { servidor, setServidor } = useContext(ServidorContext);
   const consignacao = servidor?.Consignacoes || [];
 
+  const [openDialog, setOpenDialog] = useState(false);
+
   const router = useRouter();
-  const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
   const { themeStretch } = useSettingsContext();
-  const isDesktop = useResponsive('up', 'sm');
 
   if (!servidor) return null;
 
@@ -79,6 +67,14 @@ export default function PageThree() {
 
   // Calculando o percentual de margem reservada
   const percentualMargemReservada = Math.round((margemReservada / salarioLiquido) * 100);
+
+  const handleClickPrint = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   return (
     <PrivateRoute>
@@ -354,25 +350,46 @@ export default function PageThree() {
               cursor-pointer
               items-center justify-center text-center bg-gray-100 p-4 hover:bg-gray-200
             `}
-                      onClick={() => router.push('/service')}
                     >
-                      <img src="/assets/images/home/contracheque.png" alt="" className="h-22" />
+                      <img
+                        src="/assets/images/home/contracheque.png"
+                        onClick={() => handleClickPrint()}
+                        alt=""
+                        className="h-22"
+                      />
+                    </Box>
+                  </Box>
+                </Box>
 
-                      {/* <Link
-                        className={`
-                hidden md:block lg:text-xs md:text-justify 
-                focus:bg-blue-600 font-mono text-xs text-principal hover:text-blue-300 hover:underline
-              `}
-                        href="/service"
-                      >
-                        Contracheque
-                      </Link> */}
+                <Box className="flex flex-col bg-transparent border-blue-100 border row-span-1 px-2 divide-y-2 divide-gray-100 divide-solid place-content-start bg-gray-50">
+                  <Box className="mx-2 py-2 flex flex-row justify-start text-left items-center">
+                    {IconeUserGroup && <i>{IconeUserGroup}</i>}
+                    <Typography className="px-4 font-bold text-principal text-sm">
+                      Margem
+                    </Typography>
+                  </Box>
+
+                  <Box className="mx-2 py-2 flex flex-row justify-start text-left items-center">
+                    <Box className="flex flex-col w-full max-w-600">
+                      <Box>
+                        <EcommerceCurrentBalance
+                          title="Saldo Margem cartão"
+                          row={servidor}
+                          currentBalance={
+                            Number(servidor?.margem10) - Number(servidor?.margemReservada) || 0
+                          }
+                          // handleDetalhesConsignacao={handleDetalhesConsignacao}
+                          sentAmount={0}
+                        />
+                      </Box>
                     </Box>
                   </Box>
                 </Box>
               </Box>
             </Box>
           </Grid>
+
+          <PDFDialogHolerite open={openDialog} onClose={handleCloseDialog} />
         </Container>
       </Page>
     </PrivateRoute>

@@ -126,7 +126,16 @@ function AppSimulacaoRow({ row, onEditPropostaRow }: AppSimulacaoRowProps) {
   };
 
   return (
-    <TableRow>
+    <TableRow
+      sx={{
+        '&:nth-of-type(odd)': {
+          backgroundColor: 'divider',
+        },
+        '& > .MuiTableCell-root': {
+          paddingY: 1, // Diminui a margem vertical
+        },
+      }}
+    >
       <TableCell align="right" sx={{ textTransform: 'capitalize' }}>
         {fCurrencyBr(Number(row?.valorParcelas))}
       </TableCell>

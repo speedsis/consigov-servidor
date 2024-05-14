@@ -125,7 +125,16 @@ function AppPropostaRow({ row, onEditRow, averbarProposta }: AppPropostaRowProps
   } = row;
 
   return (
-    <TableRow>
+    <TableRow
+      sx={{
+        '&:nth-of-type(odd)': {
+          backgroundColor: 'divider',
+        },
+        '& > .MuiTableCell-root': {
+          paddingY: 1, // Diminui a margem vertical
+        },
+      }}
+    >
       <TableCell align="left">{`${Rublica.codigo} | ${Rublica.descricao}`}</TableCell>
 
       <TableCell align="center"> {prazo ?? ' - '} </TableCell>

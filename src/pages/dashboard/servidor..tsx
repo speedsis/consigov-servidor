@@ -9,10 +9,6 @@ import DashboardLayout from 'src/layouts/dashboard';
 import { useSettingsContext } from 'src/components/settings';
 import ServidorDetalheForm from 'src/sections/@servidor';
 
-// sections
-
-// ----------------------------------------------------------------------
-
 ServidoDetalhe.getLayout = function getLayout(page: React.ReactElement) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };

@@ -1,8 +1,7 @@
 import React, { createContext, useState, useEffect, PropsWithChildren, useContext } from 'react';
 import { Servidor } from 'src/@types/servidor';
 import * as utils from 'src/auth/utils';
-
-export const revalidate = 36; // revalidate at most every hour
+import { useAuthSwr } from 'src/hooks/useAuthSwr';
 
 // Defina o tipo para o contexto
 type ServidorContextProps = {
@@ -21,10 +20,9 @@ export const ServidorContext = createContext(initContextData);
 
 // Crie o provedor de contexto
 const ServidorProvider = (props: PropsWithChildren) => {
-  // Estado para armazenar os dados do servidor
   const [servidor, setServidor] = useState<Servidor | null>(null);
-  // Estado para controlar o carregamento
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const servidorCpf = '01936830248';
 
   // Efeito para carregar o servidor
   useEffect(() => {
@@ -42,7 +40,24 @@ const ServidorProvider = (props: PropsWithChildren) => {
     fetchData();
   }, []);
 
-  console.log('servidor servidor : ', servidor);
+  // Use o hook useAuthSwr para buscar os dados do servidor
+  const { data, error } = useAuthSwr(`servidor/clukjlqxp0000ik9inf67gl1f?cpf=${servidorCpf}`, {
+    refreshInterval: 20000,
+    fallbackData: servidor,
+  });
+
+  // Atualize o estado do servidor com os dados recebidos
+  useEffect(() => {
+    if (data) {
+      setServidor(data);
+      setLoading(false);
+    }
+
+    if (error) {
+      console.error('Erro ao obter servidor:', error);
+      setLoading(false);
+    }
+  }, [data, error]);
 
   // Função para atualizar o servidor
   const handleSetServidor = (novoServidor: Servidor | null) => {

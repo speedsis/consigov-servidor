@@ -26,13 +26,11 @@ Search.getLayout = function getLayout(page: React.ReactElement) {
 // ----------------------------------------------------------------------
 
 export default function Search() {
-  const [openModal, setOpenModal] = React.useState(false);
   const { servidor } = useContext(ServidorContext);
-
   const consignacao = servidor?.Consignacoes || [];
 
-  const vlrParcela = consignacao[0].valorParcela || 0;
-  const parcelaContrato = consignacao[0].prazoContrato || 0;
+  const vlrParcela = consignacao[0]?.valorParcela || 0;
+  const parcelaContrato = consignacao[0]?.prazoContrato || 0;
 
   return (
     <Box className="flex h-screen">

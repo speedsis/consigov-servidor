@@ -1,13 +1,11 @@
 import { useSnackbar } from 'notistack';
 import AppListSimulacao from '../components/AppListSimulacao';
-import { useContext, useState, cache } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { ServidorContext } from 'src/context/ServidorContext';
-import { Servidor, Simulacao } from 'src/@types/servidor';
-
-export const revalidate = 10; // revalidate the data at most every hour
+import { Simulacao } from 'src/@types/servidor';
 
 export default function ServidorSimulacao() {
-  const { servidor, setServidor } = useContext(ServidorContext);
+  const { servidor } = useContext(ServidorContext);
   const simulacao = servidor?.Simulacao ?? [];
 
   const { enqueueSnackbar } = useSnackbar();
@@ -54,16 +52,16 @@ export default function ServidorSimulacao() {
           throw new Error(updatedData.error);
         }
 
-        const newServidor = {
-          ...servidor,
-          Simulacao: servidor?.Simulacao
-            ? servidor.Simulacao.map((v) => (v.id === data.id ? { ...v, status: data.status } : v))
-            : [data],
-        };
+        // const newServidor = {
+        //   ...servidor,
+        //   Simulacao: servidor?.Simulacao
+        //     ? servidor.Simulacao.map((v) => (v.id === data.id ? { ...v, status: data.status } : v))
+        //     : [data],
+        // };
 
-        setServidor(newServidor as Servidor);
+        // setServidor(newServidor as Servidor);
 
-        console.log(updatedData);
+        // console.log(updatedData);
 
         enqueueSnackbar('Status alterado com sucesso!', { variant: 'success' });
       } else {
@@ -87,7 +85,6 @@ export default function ServidorSimulacao() {
           { id: 'valor', align: 'right', label: 'Valor a receber' },
           { id: 'prazo', align: 'center', label: 'Prazo' },
           { id: 'status', align: 'center', label: 'Status' },
-
           { id: '', align: 'center', label: 'Ação' },
         ]}
       />

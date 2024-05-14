@@ -102,7 +102,16 @@ function AppReservaRow({ row, onEditRow }: AppReservaRowProps) {
   const { id, valor, status, criadoPor, criadoEm, dtReserva } = row;
 
   return (
-    <TableRow>
+    <TableRow
+      sx={{
+        '&:nth-of-type(odd)': {
+          backgroundColor: 'divider',
+        },
+        '& > .MuiTableCell-root': {
+          paddingY: 1, // Diminui a margem vertical
+        },
+      }}
+    >
       <TableCell align="left">{'Consignataria'}</TableCell>
 
       <TableCell align="right"> {fCurrencyBr(Number(valor)) ?? 0} </TableCell>
