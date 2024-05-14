@@ -263,8 +263,8 @@ export async function getServidor(): Promise<Servidor> {
 
   try {
     const data = await new ServidorService().getServidor(
-      'clukjlqxp0000ik9inf67gl1f',
-      '01936830248',
+      'cltghrgx9000112nk3akgv01d',
+      '83212094249',
       'cpf'
     );
 

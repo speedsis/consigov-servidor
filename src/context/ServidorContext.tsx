@@ -22,7 +22,7 @@ export const ServidorContext = createContext(initContextData);
 const ServidorProvider = (props: PropsWithChildren) => {
   const [servidor, setServidor] = useState<Servidor | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const servidorCpf = '01936830248';
+  const servidorCpf = '83212094249';
 
   // Efeito para carregar o servidor
   useEffect(() => {
@@ -41,7 +41,7 @@ const ServidorProvider = (props: PropsWithChildren) => {
   }, []);
 
   // Use o hook useAuthSwr para buscar os dados do servidor
-  const { data, error } = useAuthSwr(`servidor/clukjlqxp0000ik9inf67gl1f?cpf=${servidorCpf}`, {
+  const { data, error } = useAuthSwr(`servidor/cltghrgx9000112nk3akgv01d?cpf=${servidorCpf}`, {
     refreshInterval: 20000,
     fallbackData: servidor,
   });
