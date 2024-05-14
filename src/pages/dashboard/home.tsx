@@ -91,7 +91,7 @@ export default function PageThree() {
                     OLÁ, {servidor?.nome}
                   </Typography>
 
-                  {servidor?.Consignacoes.map((item, index) => (
+                  {servidor?.Consignacoes?.map((item, index) => (
                     <ul key={index} className="divide-y-2 divide-gray-200 divide-solid">
                       <Box className="bg-gray-200 mx-2 py-1">
                         <Typography className="pl-4 text-principal text-sm font-semibold">
